@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barbearia</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+
+    <div class="barra-topo"></div>
+
+    <div class="container">
+        <header>
+            <h1>Barbearia</h1>
+        </header>
+
+        <main>
+            <section class="principal">
+                <!-- Substitua o src abaixo pelo caminho da imagem principal -->
+                <img src="{% static 'imagens/Corte_Cabelo_Início.webp' %}" alt="Barbeiro cortando cabelo de cliente" class="banner">
+
+                <h2>Sobre a Barbearia</h2>
+
+                <p>Localizada no coração da cidade a <strong>Barbearia</strong> traz para o mercado inovação em cortes de cabelos.</p>
+
+                <p class="missao">Nossa missão é: <strong>"Proporcionar auto-estima e qualidade de vida aos clientes".</strong></p>
+
+                <p>Oferecemos profissionais experientes e antenados às mudanças no mundo da moda. O atendimento possui padrão de excelência e agilidade, garantindo qualidade e satisfação dos nossos clientes.</p>
+
+                <div class="area-botao">
+                    <button type="button" class="btn-trabalhe">Trabalhe conosco</button>
+                </div>
+            </section>
+
+            <section class="beneficios">
+                <h3>Benefícios</h3>
+
+                <div class="conteudo-beneficios">
+                    <ul class="lista-beneficios">
+                        <li>Atendimento aos Clientes</li>
+                        <li>Espaço diferenciado</li>
+                        <li>Localização</li>
+                        <li>Profissionais Qualificados</li>
+                    </ul>
+
+                    <!-- Substitua o src abaixo pelo caminho da segunda imagem -->
+                    <img src="{% static 'imagens/Corte_Cabelo_Fim.webp' %}" alt="Barbeiro finalizando corte" class="imagem-beneficios">
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
