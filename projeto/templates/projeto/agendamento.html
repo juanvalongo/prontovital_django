@@ -1,0 +1,89 @@
+{% extends 'projeto/base.html' %}
+{% block title %}Agendar consulta | ProntoVital{% endblock %}
+{% block content %}
+<div class="page-container">
+    <section class="page-heading">
+        <p class="section-kicker">AGENDA DE CONSULTAS</p>
+        <h1>Agendar consulta</h1>
+        <p class="muted">Escolha uma data, um horário e um profissional para reservar seu atendimento.</p>
+    </section>
+
+    <div class="booking-layout">
+        <section class="content-card">
+            <div class="card-heading">
+                <div>
+                    <h2>Escolha a data</h2>
+                    <p class="muted">Horários demonstrativos de 28/11/2026 a 16/12/2026.</p>
+                </div>
+                <span class="icon-badge" aria-hidden="true">▦</span>
+            </div>
+            <form method="get" class="date-picker">
+                <label for="profissional-escolhido">Profissional</label>
+                <select class="form-input" id="profissional-escolhido" name="profissional"
+                        onchange="this.form.submit()">
+                    {% for chave, profissional in profissionais.items %}
+                        <option value="{{ chave }}" {% if chave == profissional_selecionado %}selected{% endif %}>
+                            {{ profissional.nome }} — {{ profissional.especialidade }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="data-escolhida">Data da consulta</label>
+                <div class="date-picker-row">
+                    <select class="form-input" id="data-escolhida" name="data"
+                            onchange="this.form.submit()">
+                        {% for dia in datas %}
+                            <option value="{{ dia|date:'Y-m-d' }}" {% if dia == data_selecionada %}selected{% endif %}>
+                                {{ dia|date:"l, d/m/Y" }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+
+            <div class="availability-section">
+                <h3>Horários disponíveis</h3>
+                {% if horarios_disponiveis %}
+                    <form method="post" class="form-stack">
+                        {% csrf_token %}
+                        <input type="hidden" name="data" value="{{ data_selecionada|date:'Y-m-d' }}">
+                        <input type="hidden" name="profissional" value="{{ profissional_selecionado }}">
+                        <div class="slot-grid">
+                            {% for horario in horarios_disponiveis %}
+                                <label class="slot-option">
+                                    <input type="radio" name="horario" value="{{ horario }}"
+                                           {% if form.horario.value == horario %}checked{% endif %} required>
+                                    <span>{{ horario }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        {% for error in form.horario.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        {% for error in form.profissional.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        <div class="form-field">
+                            <label for="{{ form.observacao.id_for_label }}">Observação (opcional)</label>
+                            {{ form.observacao }}
+                            {% for error in form.observacao.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+                        </div>
+                        {% for error in form.data.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        <button class="button button-primary" type="submit">Confirmar agendamento <span aria-hidden="true">→</span></button>
+                    </form>
+                {% else %}
+                    <div class="empty-state">
+                        <span class="icon-badge" aria-hidden="true">◷</span>
+                        <h3>Nenhum horário livre nesta data</h3>
+                        <p class="muted">Escolha outra data para consultar a disponibilidade.</p>
+                    </div>
+                {% endif %}
+                <p class="demo-note">Os profissionais, unidades e horários são dados fictícios para demonstração acadêmica.</p>
+            </div>
+        </section>
+
+        <aside class="content-card patient-summary">
+            <span class="icon-badge" aria-hidden="true">♡</span>
+            <p class="section-kicker">PACIENTE</p>
+            <h2>{{ request.user.get_full_name|default:request.user.email }}</h2>
+            <p class="muted">O agendamento será salvo na sua conta e poderá ser consultado em “Meus agendamentos”.</p>
+            <a class="text-link" href="{% url 'visualizar_dados' %}">Ver meus agendamentos →</a>
+        </aside>
+    </div>
+</div>
+{% endblock %}

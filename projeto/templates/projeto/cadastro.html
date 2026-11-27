@@ -1,0 +1,44 @@
+{% extends 'projeto/base.html' %}
+{% load static %}
+{% block title %}Cadastro de paciente | ProntoVital{% endblock %}
+{% block content %}
+<div class="auth-layout">
+    <section class="auth-hero auth-hero-compact">
+        <a class="auth-brand" href="{% url 'login' %}">
+            <img src="{% static 'imagens/prontovital-logo.png' %}" alt="ProntoVital">
+        </a>
+        <p class="eyebrow">PLATAFORMA DE SAÚDE DIGITAL</p>
+        <h1>Seu cuidado começa aqui.</h1>
+        <p class="hero-copy">Crie sua conta de paciente para acompanhar e organizar suas consultas.</p>
+    </section>
+
+    <section class="auth-panel">
+        <div class="auth-card register-card">
+            <div class="auth-tabs">
+                <a class="auth-tab" href="{% url 'login' %}">Entrar</a>
+                <a class="auth-tab active" href="{% url 'cadastro' %}" aria-current="page">Cadastrar</a>
+            </div>
+            <div class="section-kicker">CONTA DE PACIENTE</div>
+            <h2>Crie sua conta</h2>
+            <p class="muted">Preencha seus dados para salvar seu cadastro com segurança.</p>
+
+            <form method="post" class="form-grid">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form-errors full-width">{{ form.non_field_errors }}</div>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-field {% if field.name == 'observacoes' or field.name == 'endereco' %}full-width{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}<small class="field-help">{{ field.help_text }}</small>{% endif %}
+                        {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+                    </div>
+                {% endfor %}
+                <button class="button button-primary full-width" type="submit">Criar conta de paciente <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="form-footer">Já tem uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+        </div>
+    </section>
+</div>
+{% endblock %}

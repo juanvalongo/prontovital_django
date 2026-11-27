@@ -1,0 +1,59 @@
+{% extends 'projeto/base.html' %}
+{% block title %}Meus agendamentos | ProntoVital{% endblock %}
+{% block content %}
+<div class="page-container">
+    <section class="page-heading">
+        <p class="section-kicker">SUA ÁREA DE SAÚDE</p>
+        <h1>Meus agendamentos</h1>
+        <p class="muted">Acompanhe as consultas salvas na sua conta.</p>
+    </section>
+
+    <section class="summary-card">
+        <span class="icon-badge" aria-hidden="true">▦</span>
+        <div>
+            <strong>{{ consultas_ativas }}</strong>
+            <span>consulta{{ consultas_ativas|pluralize:"s" }} ativa{{ consultas_ativas|pluralize:"s" }}</span>
+        </div>
+        <a class="button button-secondary" href="{% url 'agendamento' %}">Agendar consulta</a>
+    </section>
+
+    {% if consultas %}
+        <div class="appointment-list">
+            {% for consulta in consultas %}
+                <article class="content-card appointment-card">
+                    <div class="appointment-top">
+                        <div>
+                            <h2>{{ consulta.get_profissional_display }}</h2>
+                            <p class="specialty">{{ consulta.especialidade }}</p>
+                        </div>
+                        <span class="status-badge {% if consulta.status == 'cancelado' %}status-cancelled{% endif %}">
+                            {{ consulta.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="appointment-details">
+                        <p><span aria-hidden="true">⌖</span> {{ consulta.clinica }}</p>
+                        <p><span aria-hidden="true">▦</span> {{ consulta.data|date:"l, d/m/Y" }}</p>
+                        <p><span aria-hidden="true">◷</span> {{ consulta.horario|time:"H:i" }}</p>
+                    </div>
+                    {% if consulta.observacao %}
+                        <p class="appointment-note">{{ consulta.observacao }}</p>
+                    {% endif %}
+                    {% if consulta.status == 'agendado' %}
+                        <form method="post" action="{% url 'cancelar_consulta' consulta.id %}">
+                            {% csrf_token %}
+                            <button class="button button-danger" type="submit">Cancelar consulta</button>
+                        </form>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <section class="content-card empty-state">
+            <span class="icon-badge" aria-hidden="true">▦</span>
+            <h2>Nenhuma consulta agendada</h2>
+            <p class="muted">Suas consultas marcadas ou canceladas aparecerão aqui.</p>
+            <a class="button button-primary" href="{% url 'agendamento' %}">Buscar horários disponíveis</a>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

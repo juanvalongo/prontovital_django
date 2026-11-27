@@ -1,34 +1,47 @@
-<!DOCTYPE html>
+{% extends 'projeto/base.html' %}
 {% load static %}
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Formulário</title>
-<link rel="stylesheet" type="text/css" href="{% static 'css/estilo.css' %}">
-</head>
-<body>
- 
-<form action="{% url 'visual' %}" method="post">
-{% csrf_token %}	
-<img src="{% static 'imagens/logo1.png' %}">
-<label for="matricula"> Matrícula</label>
-<input name="matricula" id="matricula" type="text" placeholder="Insira sua matrícula" autocomplete="True" title="Matrícula do Usuário" alt="Matrícula do usuário para login" required><br>
- 
-		<label> Senha</label>
-<input name="senha" id="senha" type="password" placeholder="Insira sua senha" autocomplete="false" title="Senha do Usuário" alt="Senha do usuário logar" >
- 
-		<button id="login-button" type="submit">Login</button>
-</form>
-	
-	<a href="#">Informações de Ajuda</a>
- 
-	<h2><a href="">Registrar</a></h2>
- 
-	<footer>
-<p>Desenvolvido por Juan Valongo</p>
-</footer>
- 
+{% block title %}Entrar | ProntoVital{% endblock %}
+{% block content %}
+<div class="auth-layout">
+    <section class="auth-hero">
+        <a class="auth-brand" href="{% url 'login' %}">
+            <img src="{% static 'imagens/prontovital-logo.png' %}" alt="ProntoVital">
+        </a>
+        <p class="eyebrow">PLATAFORMA DE SAÚDE DIGITAL</p>
+        <h1>Do primeiro sintoma ao atendimento.</h1>
+        <p class="hero-copy">Organize seu cuidado e agende consultas de forma simples e rápida.</p>
+        <div class="hero-pills">
+            <span>Consultas online</span>
+            <span>Rede de especialistas</span>
+            <span>Cuidado conectado</span>
+        </div>
+    </section>
 
-</body>
-</html>
+    <section class="auth-panel">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <a class="auth-tab active" href="{% url 'login' %}" aria-current="page">Entrar</a>
+                <a class="auth-tab" href="{% url 'cadastro' %}">Cadastrar</a>
+            </div>
+            <h2>Bem-vindo(a) de volta</h2>
+            <p class="muted">Entre com suas credenciais para acessar sua área de saúde.</p>
+
+            <form method="post" class="form-stack">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="identificador">E-mail ou CPF</label>
+                    <input class="form-input" id="identificador" name="identificador"
+                           type="text" autocomplete="username" placeholder="email@exemplo.com ou CPF" required>
+                </div>
+                <div class="form-field">
+                    <label for="senha">Senha</label>
+                    <input class="form-input" id="senha" name="senha" type="password"
+                           autocomplete="current-password" placeholder="Digite sua senha" required>
+                </div>
+                <button class="button button-primary" type="submit">Entrar na plataforma <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="form-footer">Ainda não tem conta? <a href="{% url 'cadastro' %}">Cadastre-se como Paciente</a></p>
+        </div>
+    </section>
+</div>
+{% endblock %}

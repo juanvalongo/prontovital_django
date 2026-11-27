@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#131c2e">
+    <title>{% block title %}ProntoVital{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        <header class="site-header">
+            <a class="brand" href="{% url 'agendamento' %}">
+                <img src="{% static 'imagens/prontovital-logo.png' %}" alt="">
+                <span>Pronto<strong>Vital</strong></span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="{% url 'agendamento' %}">Agendar consulta</a>
+                <a href="{% url 'visualizar_dados' %}">Meus agendamentos</a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="nav-logout" type="submit">Sair</button>
+                </form>
+            </nav>
+        </header>
+    {% endif %}
+
+    {% if messages %}
+        <div class="messages" role="status" aria-live="polite">
+            {% for message in messages %}
+                <div class="message message-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">ProntoVital — cuidado conectado em um só lugar.</footer>
+</body>
+</html>
